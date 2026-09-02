@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   verify:
-    name: 类型检查 / 构建 / E2E 测试
+    name: verify
     runs-on: ubuntu-latest
     # 本任务作为“必须通过”的门禁（在分支保护规则里设为必选检查）
     steps:
