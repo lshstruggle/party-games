@@ -6,7 +6,6 @@ import {
   type Member,
   type Room,
   type ServerMsg,
-  type GameContext,
 } from '@pg/shared'
 import {
   applyAction,
@@ -15,6 +14,7 @@ import {
   nextDeadline,
   privateView,
   redactState,
+  type GameContext,
 } from '@pg/game-core'
 import type { WebSocket } from 'ws'
 

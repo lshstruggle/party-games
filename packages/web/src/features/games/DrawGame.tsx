@@ -24,10 +24,21 @@ export default function DrawGame({ room, myId, priv, act }: GameProps) {
   const roundRef = useRef(s.round)
 
   useEffect(() => {
+    const server = s.strokes
+    const local = strokesRef.current
+    // 回合切换：直接以服务端为准重置
     if (roundRef.current !== s.round) {
       roundRef.current = s.round
-      strokesRef.current = s.strokes
-      setStrokes(s.strokes)
+      strokesRef.current = server
+      setStrokes(server)
+      return
+    }
+    // 防丢包自愈：若服务端笔画在数量/点数上比本地更完整（个别增量事件丢失），用服务端补齐
+    const serverPts = server.reduce((a, st) => a + st.points.length, 0)
+    const localPts = local.reduce((a, st) => a + st.points.length, 0)
+    if (serverPts > localPts || server.length > local.length) {
+      strokesRef.current = server
+      setStrokes(server)
     }
   }, [s.round, s.strokes])
 

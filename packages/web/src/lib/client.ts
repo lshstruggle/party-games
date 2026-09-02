@@ -61,7 +61,7 @@ interface Store {
   room: Room | null
   myId: string | null
   priv: Record<string, unknown> | null
-  event: { kind: string; at: number; message?: string } | null
+  event: { kind: string; at: number; message?: string; stroke?: unknown; data?: unknown } | null
   error: string | null
 
   connect(code: string, identity: Identity): void
@@ -219,8 +219,17 @@ function handle(set: (partial: Partial<Store>) => void, msg: ServerMsg) {
       break
     }
     case 'event': {
-      const payload = msg.payload as { kind?: string; message?: string } | undefined
-      if (payload?.kind) set({ event: { kind: payload.kind, message: payload.message, at: Date.now() } })
+      const payload = msg.payload as { kind?: string; message?: string; stroke?: unknown; data?: unknown } | undefined
+      if (payload?.kind)
+        set({
+          event: {
+            kind: payload.kind,
+            message: payload.message,
+            at: Date.now(),
+            stroke: payload.stroke,
+            data: payload.data,
+          },
+        })
       break
     }
     case 'error': {

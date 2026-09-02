@@ -1,0 +1,28 @@
+name: Mirror to Gitee
+
+# 每次向 main 推送（合并 PR 后）自动镜像到 Gitee，保持两边代码完全一致
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mirror to Gitee
+        uses: Yikun/hub-mirror-action@master
+        with:
+          # 源：GitHub 仓库（贡献的唯一入口）
+          src: github/lshstruggle
+          # 目标：Gitee 仓库（只读镜像，面向国内访问）
+          dst: gitee/lshstruggle
+          # Gitee 推送用的 SSH 私钥（GitHub Secrets: GITEE_PRIVATE_KEY）
+          dst_key: ${{ secrets.GITEE_PRIVATE_KEY }}
+          # Gitee 开放 API 用的令牌（GitHub Secrets: GITEE_TOKEN）
+          dst_token: ${{ secrets.GITEE_TOKEN }}
+          # 仅镜像指定仓库
+          static_list: party-games
+          # 强制覆盖，保证完全一致
+          force_update: true
+          debug: true

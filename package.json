@@ -16,7 +16,7 @@
     "dev:web": "npm -w @pg/web run dev",
     "build": "npm -w @pg/web run build",
     "deploy:worker": "npm -w @pg/worker run deploy",
-    "typecheck": "npm -w @pg/shared run typecheck && npm -w @pg/game-core run typecheck && npm -w @pg/worker run typecheck && npm -w @pg/web run typecheck"
+    "typecheck": "npm -w @pg/shared run typecheck && npm -w @pg/game-core run typecheck && npm -w @pg/worker run typecheck && npm -w @pg/web run typecheck && npm -w @pg/server run typecheck"
   },
   "devDependencies": {
     "concurrently": "^9.1.0",

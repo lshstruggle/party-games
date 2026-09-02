@@ -1,0 +1,56 @@
+name: CI
+
+# 触发：有人向 main 提 PR（贡献审核），或 main 被推送（合并后校验）
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+# 同一分支只保留最新一次运行，避免排队浪费
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: 类型检查 / 构建 / E2E 测试
+    runs-on: ubuntu-latest
+    # 本任务作为“必须通过”的门禁（在分支保护规则里设为必选检查）
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck (all packages)
+        run: npm run typecheck
+
+      - name: Build web
+        run: npm run build
+
+      - name: Build server
+        run: npm -w @pg/server run build
+
+      - name: E2E tests（自动拉起 3000 端口服务后跑全量用例）
+        run: |
+          node packages/server/dist/server.cjs > /tmp/server.log 2>&1 &
+          SRV=$!
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:3000/api/health; then echo "server up"; break; fi
+            sleep 1
+          done
+          node packages/server/test/full-e2e.mjs
+          RC=$?
+          kill $SRV 2>/dev/null || true
+          exit $RC
+        env:
+          BASE: http://localhost:3000
+          WS: ws://localhost:3000

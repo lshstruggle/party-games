@@ -51,7 +51,8 @@ sed "s/YOUR_DOMAIN/$DOMAIN/g" "$SERVER_DIR/deploy/nginx.conf" > /etc/nginx/sites
 ln -sf /etc/nginx/sites-available/party-games.conf /etc/nginx/sites-enabled/party-games.conf
 rm -f /etc/nginx/sites-enabled/default
 nginx -t
-systemctl reload nginx
+systemctl enable nginx 2>/dev/null || true
+systemctl restart nginx
 
 echo "==> [5/6] 启动 Node 服务（pm2 守护 + 开机自启）"
 cd "$SERVER_DIR"
