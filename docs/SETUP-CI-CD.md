@@ -116,3 +116,45 @@ A: 确认 `main` 已包含 `.github/workflows/ci.yml`；Fork 仓库默认不开 
 
 **Q: 想让 Gitee 也能收 PR 并同步回 GitHub？**
 A: 进阶玩法，需在 Gitee 也配 CI + 反向同步 webhook，复杂度高。当前标准方案（GitHub 为唯一入口）已满足「开放贡献 + 自动审核 + 作者批准 + 双平台代码一致」。如需双写，另行评估。
+
+---
+
+## 第六步：配置网站自动部署（GitHub → 生产服务器）
+
+> 目标：向 `main` 合并后，前端自动构建并同步到服务器 `/var/www/party/dist`，网站实时更新，无需手动 rsync。
+> 由新增的 `.github/workflows/deploy.yml` 实现（push 到 main 时触发）。
+
+### 6.1 在服务器准备部署密钥
+在本机生成一对**专用于部署**的 SSH 密钥（不要复用你登录服务器的密钥）：
+```bash
+ssh-keygen -t ed25519 -f ~/.ssh/party_deploy -C "github-deploy"
+cat ~/.ssh/party_deploy.pub
+```
+- 把 **公钥**（`~/.ssh/party_deploy.pub` 内容）追加到服务器的 `~/.ssh/authorized_keys`：
+  ```bash
+  # 在服务器上执行（或把公钥内容粘贴进现有 authorized_keys 末尾）
+  echo "ssh-ed25519 AAAA... party_deploy" >> ~/.ssh/authorized_keys
+  chmod 600 ~/.ssh/authorized_keys
+  ```
+- 确认服务器安全组/防火墙**允许 22 端口入站**（GitHub Runner 的 IP 不固定，需开放 22；若担心安全可后续限制来源）。
+
+### 6.2 在 GitHub 配置 Secrets
+进入仓库 **Settings → Secrets and variables → Actions → New repository secret**，添加：
+
+| 名称 | 值 |
+| --- | --- |
+| `SERVER_HOST` | 服务器公网 IP 或域名（如 `1.2.3.4`，或解析到服务器的域名） |
+| `SERVER_USER` | SSH 登录用户名（如 `root`、`ubuntu`、`lsh`） |
+| `SERVER_SSH_KEY` | 6.1 生成的 **私钥** 全文（`~/.ssh/party_deploy` 内容，含 `-----BEGIN/END-----`） |
+
+### 6.3 验证部署
+在 GitHub 往 `main` 推一次提交（或 **Actions → Deploy Site → Run workflow** 手动触发）。
+成功后：
+- `Actions` 里出现 `Deploy Site` 运行记录，绿勾；
+- 打开 `https://party.lshstruggle.cloud` 即为最新前端。
+
+> 说明：当前 `deploy.yml` 只同步**前端静态产物**（`packages/web/dist` → `/var/www/party/dist`）。
+> 若你改动了 **服务端逻辑**（`packages/server`、`packages/game-core` 等），需要额外在服务器上：
+> `cd /opt/party-games && git pull && npm -w @pg/server run build && pm2 restart ecosystem.config.cjs`
+> （或后续把这一步也写进 `deploy.yml` 的 SSH 步骤里）。本次 draw 修复为纯前端，部署前端即可生效。
+

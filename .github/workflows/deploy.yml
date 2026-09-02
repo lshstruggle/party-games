@@ -1,0 +1,37 @@
+name: Deploy Site
+
+# 每次向 main 合并（PR 通过 CI + 作者批准后会 push 到 main）自动把最新前端部署到生产服务器
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy-web:
+    runs-on: ubuntu-latest
+    # 只有 secrets 齐备才真正执行（避免未配置时红）
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build web
+        run: npm run build
+
+      - name: Deploy to production server
+        uses: easingthemes/ssh-deploy@v5
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
+          REMOTE_HOST: ${{ secrets.SERVER_HOST }}
+          REMOTE_USER: ${{ secrets.SERVER_USER }}
+          SOURCE: "packages/web/dist/"
+          TARGET: "/var/www/party/dist/"
+          ARGS: "-avz --delete"
