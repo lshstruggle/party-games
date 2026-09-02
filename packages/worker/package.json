@@ -1,0 +1,20 @@
+{
+  "name": "@pg/worker",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "tail": "wrangler tail",
+    "typecheck": "wrangler types && tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@pg/game-core": "*",
+    "@pg/shared": "*"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250605.0",
+    "wrangler": "^4.127.1"
+  }
+}

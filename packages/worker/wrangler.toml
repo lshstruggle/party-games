@@ -1,0 +1,25 @@
+name = "party-games"
+main = "src/index.ts"
+compatibility_date = "2025-06-01"
+compatibility_flags = ["nodejs_compat"]
+
+# 前端构建产物由同一个 Worker 托管，对外只有一个域名，避免跨域与两套部署
+[assets]
+directory = "../web/dist"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
+
+[[durable_objects.bindings]]
+name = "ROOMS"
+class_name = "RoomDO"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["RoomDO"]
+
+[observability]
+enabled = true
+
+# 本地开发：wrangler dev --local
+[env.dev]
+name = "party-games-dev"

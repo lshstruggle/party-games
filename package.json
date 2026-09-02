@@ -1,0 +1,25 @@
+{
+  "name": "party-games",
+  "private": true,
+  "version": "1.0.0",
+  "description": "聚好玩 - 朋友聚会多人联机游戏站",
+  "workspaces": [
+    "packages/shared",
+    "packages/game-core",
+    "packages/worker",
+    "packages/web",
+    "packages/server"
+  ],
+  "scripts": {
+    "dev": "concurrently -n worker,web -c magenta,cyan \"npm:dev:worker\" \"npm:dev:web\"",
+    "dev:worker": "npm -w @pg/worker run dev",
+    "dev:web": "npm -w @pg/web run dev",
+    "build": "npm -w @pg/web run build",
+    "deploy:worker": "npm -w @pg/worker run deploy",
+    "typecheck": "npm -w @pg/shared run typecheck && npm -w @pg/game-core run typecheck && npm -w @pg/worker run typecheck && npm -w @pg/web run typecheck"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0",
+    "typescript": "^5.7.2"
+  }
+}

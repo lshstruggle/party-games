@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>作品集 · 我的开发作品</title>
+<style>
+  :root { --bg:#0f1117; --card:#1a1d27; --accent:#6c8cff; --text:#e6e8ef; --muted:#9aa0b4; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+         background: radial-gradient(1200px 600px at 70% -10%, #1b2030, var(--bg));
+         color: var(--text); line-height: 1.6; min-height: 100vh; }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 64px 20px; }
+  header.hero { text-align: center; margin-bottom: 56px; }
+  .avatar { width: 96px; height: 96px; border-radius: 50%; margin: 0 auto 18px;
+            background: linear-gradient(135deg, var(--accent), #b06cff); display: grid; place-items: center;
+            font-size: 36px; font-weight: 700; color: #fff; }
+  h1 { font-size: 32px; margin-bottom: 8px; }
+  .sub { color: var(--muted); font-size: 16px; }
+  .links { margin-top: 16px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .links a { color: var(--accent); text-decoration: none; border: 1px solid #2a2f3e;
+            padding: 6px 14px; border-radius: 999px; font-size: 14px; transition: .2s; }
+  .links a:hover { background: #2a2f3e; }
+  section { margin-bottom: 48px; }
+  h2 { font-size: 20px; margin-bottom: 18px; padding-left: 12px; border-left: 3px solid var(--accent); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; }
+  .card { background: var(--card); border: 1px solid #232838; border-radius: 14px; padding: 20px;
+          transition: transform .2s, border-color .2s; }
+  .card:hover { transform: translateY(-4px); border-color: var(--accent); }
+  .card .tag { display: inline-block; font-size: 11px; color: var(--accent); background: #6c8cff22;
+               padding: 2px 8px; border-radius: 6px; margin-bottom: 10px; }
+  .card h3 { font-size: 17px; margin-bottom: 6px; }
+  .card p { color: var(--muted); font-size: 14px; }
+  .card a.more { display: inline-block; margin-top: 12px; color: var(--accent); font-size: 13px; text-decoration: none; }
+  .about p { color: var(--muted); max-width: 640px; }
+  footer { text-align: center; color: var(--muted); font-size: 13px; margin-top: 40px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <div class="avatar">我</div>
+      <h1>你的名字</h1>
+      <p class="sub">全栈开发者 · 热爱把有趣的想法做成产品</p>
+      <div class="links">
+        <a href="https://github.com/" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="mailto:you@example.com">邮箱</a>
+        <a href="https://party.YOUR_DOMAIN" target="_blank" rel="noreferrer">🎮 聚会游戏站</a>
+      </div>
+    </header>
+
+    <section>
+      <h2>精选项目</h2>
+      <div class="grid">
+        <div class="card">
+          <span class="tag">全栈 · 实时</span>
+          <h3>聚好玩 · 多人联机游戏站</h3>
+          <p>集成卧底找茬、你画我猜、光谱刻度、真心话大冒险、一夜狼镇等多款派对游戏，支持手机扫码即玩。</p>
+          <a class="more" href="https://party.YOUR_DOMAIN" target="_blank" rel="noreferrer">去看看 →</a>
+        </div>
+        <div class="card">
+          <span class="tag">前端</span>
+          <h3>项目占位标题</h3>
+          <p>在这里写一句项目简介，介绍这个项目解决了什么问题、用了什么技术栈。</p>
+          <a class="more" href="#">了解更多 →</a>
+        </div>
+        <div class="card">
+          <span class="tag">后端</span>
+          <h3>项目占位标题</h3>
+          <p>在这里写一句项目简介，介绍这个项目解决了什么问题、用了什么技术栈。</p>
+          <a class="more" href="#">了解更多 →</a>
+        </div>
+        <div class="card">
+          <span class="tag">工具</span>
+          <h3>项目占位标题</h3>
+          <p>在这里写一句项目简介，介绍这个项目解决了什么问题、用了什么技术栈。</p>
+          <a class="more" href="#">了解更多 →</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="about">
+      <h2>关于我</h2>
+      <p>一句话介绍你的技术栈与兴趣方向，比如：熟悉 React / TypeScript / Node.js，喜欢做有交互感的产品，业余研究 AI 应用落地。替换成你自己的话即可。</p>
+    </section>
+
+    <footer>© <span id="year"></span> 你的名字 · 用 ❤️ 与代码构建</footer>
+  </div>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

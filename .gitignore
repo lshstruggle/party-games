@@ -1,0 +1,39 @@
+# ===== 依赖（472M，绝不入库） =====
+node_modules/
+.pnp/
+.pnp.js
+
+# ===== 构建产物（服务器部署时由 npm run build 重新生成） =====
+dist/
+packages/*/dist/
+**/dist/
+
+# ===== 日志 =====
+*.log
+npm-debug.log*
+logs/
+/var/
+
+# ===== 环境变量 / 密钥（本项目暂无，预留） =====
+.env
+.env.*
+*.local
+*.key
+*.pem
+*.crt
+
+# ===== 编辑器 / 系统 / 运行时 =====
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+.pm2/
+*.pid
+
+# ===== 测试 / 覆盖率产物 =====
+coverage/
+
+# ===== 本地访问页（非源码，可忽略） =====
+party-access.html
+party-access-qr.png
